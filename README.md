@@ -1,6 +1,6 @@
 # SeaSwipe
 
-**Agile-modelling image classification for deep-sea imagery.**
+**Agile-modelling image classification for ecological imagery.**
 
 SeaSwipe turns a folder of underwater frames into a per-species detector with a
 few dozen clicks. It runs an object detector over your frames, embeds every
@@ -24,11 +24,11 @@ procedures of Navine et al. (2024).
 ```
  frames/                                  (your input: a folder of images)
    │
-   │  python seaswipe_preprocess.py  ──  YOLO detector + DINOv3 embedding
+   │  python seaswipe_preprocess.py  ──  foundation detector + image embedding
    ▼
  seaswipe_output/
    ├── patches/            cropped detections (+ detections_coco.json)
-   ├── embeddings.npz      L2-normalised DINOv3 vectors, one per patch
+   ├── embeddings.npz      L2-normalised embedding vectors, one per patch
    └── manifest.json
    │
    │  python seaswipe_analysis.py  ──  interactive web workspace
@@ -62,7 +62,7 @@ npm run build
 cd ..
 ```
 
-DINOv3 weights are downloaded automatically by `transformers` on first use. The
+For image embedding, we use DINOv3 by default. DINOv3 weights are downloaded automatically by `transformers` on first use. The
 default model (`facebook/dinov3-vitl16-pretrain-lvd1689m`) is gated on Hugging
 Face — accept the model terms and log in (`huggingface-cli login`, or set
 `HF_TOKEN`) before running preprocessing. A GPU is strongly recommended for

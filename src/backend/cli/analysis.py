@@ -2,8 +2,8 @@
 
 Points at a directory produced by ``seaswipe_preprocess.py`` (containing
 ``embeddings.npz`` + ``patches/``), then serves the single-page workspace. The
-page asks for a species name and runs the full agile-modelling flow; state is
-saved under ``<data>/analyses/<species>/`` so relaunching resumes.
+page asks for a taxon name and runs the full agile-modelling flow; state is
+saved under ``<data>/analyses/<taxon>/`` so relaunching resumes.
 """
 
 import argparse
@@ -29,8 +29,8 @@ def build_parser() -> argparse.ArgumentParser:
                    help="Preprocessing output directory (contains embeddings.npz).")
     p.add_argument("--embeddings", type=Path,
                    help="Path to embeddings.npz directly (its parent dir is used).")
-    p.add_argument("--species", default=None,
-                   help="Optionally pre-select a species (otherwise the page asks).")
+    p.add_argument("--taxon", default=None,
+                   help="Optionally pre-select a taxon (otherwise the page asks).")
     p.add_argument("--host", default="127.0.0.1", help="Bind host (default: 127.0.0.1).")
     p.add_argument("--port", type=int, default=8080, help="Bind port (default: 8080).")
     return p
@@ -52,9 +52,9 @@ def run(args: argparse.Namespace) -> int:
         return 1
     set_workspace(ws)
 
-    if args.species:
-        ws.select(args.species)
-        logger.info("Pre-selected species: %s", args.species)
+    if args.taxon:
+        ws.select(args.taxon)
+        logger.info("Pre-selected taxon: %s", args.taxon)
 
     # Import the app only after the workspace is set; the app object is shared
     # in-process, so we must not use reload / multiple workers.

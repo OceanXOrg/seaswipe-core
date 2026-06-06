@@ -2,10 +2,10 @@ import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { analysisApi } from "@/api/client";
 
-export default function SpeciesGate({
+export default function TaxonGate({
   onSelected,
 }: {
-  onSelected: (species: string) => void;
+  onSelected: (taxon: string) => void;
 }) {
   const [name, setName] = useState("");
 
@@ -15,8 +15,8 @@ export default function SpeciesGate({
   });
 
   const selectMutation = useMutation({
-    mutationFn: (species: string) => analysisApi.select(species),
-    onSuccess: (res) => onSelected(res.species),
+    mutationFn: (taxon: string) => analysisApi.select(taxon),
+    onSuccess: (res) => onSelected(res.taxon),
   });
 
   const existing = data?.analyses ?? [];
@@ -25,13 +25,13 @@ export default function SpeciesGate({
     <div className="mx-auto max-w-xl py-16">
       <h1 className="text-2xl font-bold text-grey-300">SeaSwipe</h1>
       <p className="mt-1 text-sm text-grey-200">
-        Build a one-vs-rest classifier for a single species, then evaluate it and
-        export its detections. One analysis per species.
+        Build a classifier for a single taxon, then evaluate it and
+        export its detections. One analysis per taxon.
       </p>
 
       <div className="mt-8 rounded-lg bg-white p-6 shadow-sm">
         <label className="block text-sm font-semibold text-grey-300">
-          Species name
+          Taxon name
         </label>
         <p className="mb-2 text-xs text-grey-200">
           e.g. "Sea pen", "Bamboo coral". This names the analysis and its output
@@ -42,7 +42,7 @@ export default function SpeciesGate({
             autoFocus
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Enter a species name..."
+            placeholder="Enter a taxon name..."
             className="grow rounded border border-grey-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-100"
             onKeyDown={(e) => {
               if (e.key === "Enter" && name.trim()) selectMutation.mutate(name.trim());
@@ -72,10 +72,10 @@ export default function SpeciesGate({
             {existing.map((a) => (
               <button
                 key={a.slug}
-                onClick={() => selectMutation.mutate(a.species)}
+                onClick={() => selectMutation.mutate(a.taxon)}
                 className="flex w-full items-center justify-between rounded-lg border border-grey-100 bg-white px-4 py-3 text-left hover:border-blue-100 hover:bg-blue-50/40"
               >
-                <span className="font-medium text-grey-300">{a.species}</span>
+                <span className="font-medium text-grey-300">{a.taxon}</span>
                 <span className="text-xs text-grey-200">
                   {a.n_pos} pos / {a.n_neg} neg
                   {a.has_model ? " · trained" : ""}

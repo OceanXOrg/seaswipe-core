@@ -1,7 +1,7 @@
 /**
  * API client — typed fetch wrappers for the SeaSwipe analysis backend.
  *
- * The backend serves a single active analysis (selected by species), so none of
+ * The backend serves a single active analysis (selected by taxon), so none of
  * these calls take an analysis id.
  */
 
@@ -22,7 +22,7 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
 // ── Types ──────────────────────────────────────────────────────────────────
 
 export interface AnalysisSummary {
-  species: string;
+  taxon: string;
   slug: string;
   run_id: string;
   n_pos: number;
@@ -33,7 +33,7 @@ export interface AnalysisSummary {
 
 export interface Current {
   active: boolean;
-  species?: string;
+  taxon?: string;
   slug?: string;
   run_id?: string;
   has_model?: boolean;
@@ -158,10 +158,10 @@ export interface PatchSource {
 export const analysisApi = {
   listAnalyses: () =>
     request<{ analyses: AnalysisSummary[] }>("/analyses"),
-  select: (species: string) =>
-    request<{ species: string; slug: string; run_id: string }>("/select", {
+  select: (taxon: string) =>
+    request<{ taxon: string; slug: string; run_id: string }>("/select", {
       method: "POST",
-      body: JSON.stringify({ species }),
+      body: JSON.stringify({ taxon }),
     }),
   current: () => request<Current>("/current"),
   defaults: () =>

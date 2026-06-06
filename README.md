@@ -2,10 +2,10 @@
 
 **Agile-modelling image classification for ecological imagery.**
 
-SeaSwipe turns a folder of underwater frames into a per-species detector with a
+SeaSwipe turns a folder of underwater frames into a per-taxon detector with a
 few dozen clicks. It runs an object detector over your frames, embeds every
 detected patch with a self-supervised vision transformer, and then lets you
-train a lightweight linear classifier for one species at a time through an
+train a lightweight linear classifier for one taxon at a time through an
 interactive *agile-modelling* loop: pick a seed, label its nearest neighbours,
 train, inspect the prediction histogram, label the patches the model is least
 sure about, and repeat. It then estimates the classifier's ROC-AUC,
@@ -33,11 +33,11 @@ procedures of Navine et al. (2024).
    │
    │  python seaswipe_analysis.py  ──  interactive web workspace
    ▼
- seaswipe_output/analyses/<species>/
-   ├── <species>_labels.json
-   ├── <species>_classifier.npz       trained linear probe (weights, bias)
-   ├── <species>_predictions.csv      per-patch logit + probability
-   └── <species>_evaluation.json      ROC-AUC, PRF curve, count error
+ seaswipe_output/analyses/<taxon>/
+   ├── <taxon>_labels.json
+   ├── <taxon>_classifier.npz       trained linear probe (weights, bias)
+   ├── <taxon>_predictions.csv      per-patch logit + probability
+   └── <taxon>_evaluation.json      ROC-AUC, PRF curve, count error
 ```
 
 The two stages are decoupled: preprocessing is a one-off batch job (slow, GPU);
@@ -90,14 +90,14 @@ Useful options: `--embedding-model <id-or-path>`, `--device cuda|cpu`,
 (re-embed existing patches without re-running the detector). See
 `python seaswipe_preprocess.py --help`.
 
-### 2. Analyse — one species at a time
+### 2. Analyse — one taxon at a time
 
 ```bash
 python seaswipe_analysis.py --data ./seaswipe_output
 # then open http://127.0.0.1:8080
 ```
 
-The page asks for a **species name** and then opens the workspace:
+The page asks for a **taxon name** and then opens the workspace:
 
 - **Train.** Pick a seed patch (random sampling or filename search), label its
   nearest neighbours as positive/negative, and click *Train Classifier*. Inspect
@@ -114,9 +114,9 @@ The page asks for a **species name** and then opens the workspace:
   to see its source frame with the detection box, and export the predictions as
   CSV or the full analysis as a ZIP.
 
-Run **one analysis per species**. State is saved under
-`seaswipe_output/analyses/<species>/`, so you can stop and relaunch to resume,
-or switch species from the workspace header.
+Run **one analysis per taxon**. State is saved under
+`seaswipe_output/analyses/<taxon>/`, so you can stop and relaunch to resume,
+or switch taxon from the workspace header.
 
 > **Single-user, single-session.** The analysis server holds one active analysis
 > in memory and is not locked for concurrent writers. Don't open the same
@@ -150,7 +150,7 @@ the same labels.
 | | Batch size | 64 |
 | | Normalisation | L2 |
 | **Active learning** | Sampling strategy | Entropy Sampling |
-| | Sample size *K* | 20 |
+| | Sample size *K* | 10 |
 | **Similarity search** | Top similar samples | 3⁄4 *K* (15) |
 | | Top dissimilar samples | 1⁄4 *K* (5) |
 | **Classifier** | Architecture | Linear layer (*D* → 1), no hidden layers |
@@ -173,16 +173,16 @@ the Bernoulli entropy of `sigmoid(logit)` is maximal.
 
 ## Outputs
 
-Each analysis writes the following under `seaswipe_output/analyses/<species>/`:
+Each analysis writes the following under `seaswipe_output/analyses/<taxon>/`:
 
 | File | Contents |
 |------|----------|
-| `<species>_labels.json` | The patches you labelled during training (positive/negative) |
-| `<species>_classifier.npz` | Trained linear-probe `weights` and `bias` |
-| `<species>_predictions.csv` | Per-patch `filename, logit, probability` |
-| `<species>_evaluation.json` | Buckets, ROC-AUC, PRF curve, F1-optimal threshold, count error |
+| `<taxon>_labels.json` | The patches you labelled during training (positive/negative) |
+| `<taxon>_classifier.npz` | Trained linear-probe `weights` and `bias` |
+| `<taxon>_predictions.csv` | Per-patch `filename, logit, probability` |
+| `<taxon>_evaluation.json` | Buckets, ROC-AUC, PRF curve, F1-optimal threshold, count error |
 | `training_rounds/round_*.json` | A snapshot of the labels used at each training round (for learning curves) |
-| `analysis.json` | The species name and run id |
+| `analysis.json` | The taxon name and run id |
 
 ---
 

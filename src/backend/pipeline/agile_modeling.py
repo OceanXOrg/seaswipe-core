@@ -46,7 +46,7 @@ class ClassifierResult:
 
 @dataclass
 class AnalysisState:
-    """In-memory state for one analysis (one species)."""
+    """In-memory state for one analysis (one taxon)."""
     embeddings: np.ndarray
     filenames: list[str]
     filename_to_idx: dict[str, int]

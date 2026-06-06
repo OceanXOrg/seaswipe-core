@@ -4,7 +4,7 @@ Filesystem-backed workspace + analysis state.
 Replaces the database / task-queue machinery of the full SeaSwipe platform with
 a single local directory. One workspace wraps one preprocessing output dir
 (``embeddings.npz`` + ``patches/`` + ``manifest.json``) and manages one analysis
-*per species*, persisted under ``analyses/{slug}/``.
+*per taxon*, persisted under ``analyses/{slug}/``.
 
 The server holds a single global Workspace and a single *active* analysis at a
 time. This tool is intentionally single-user, single-session — see the README.
@@ -33,10 +33,10 @@ ANALYSES_DIRNAME = "analyses"
 
 
 def slugify(name: str) -> str:
-    """Filesystem-safe slug for a species name. e.g. 'Sea Pen' -> 'sea-pen'."""
+    """Filesystem-safe slug for a taxon name. e.g. 'Sea Pen' -> 'sea-pen'."""
     s = name.strip().lower()
     s = re.sub(r"[^a-z0-9]+", "-", s).strip("-")
-    return s or "species"
+    return s or "taxon"
 
 
 def _label_counts(labels: dict[str, int]) -> tuple[int, int]:
@@ -98,11 +98,11 @@ class Workspace:
                 continue
             slug = d.name
             run_id = slug
-            species = slug
+            taxon = slug
             meta = self._meta_path(slug)
             if meta.exists():
                 try:
-                    species = json.loads(meta.read_text()).get("species", slug)
+                    taxon = json.loads(meta.read_text()).get("taxon", slug)
                 except Exception:
                     pass
             prefix = f"{run_id}_"
@@ -126,7 +126,7 @@ class Workspace:
                 except Exception:
                     evaluated = False
             out.append({
-                "species": species,
+                "taxon": taxon,
                 "slug": slug,
                 "run_id": run_id,
                 "n_pos": n_pos,
@@ -136,23 +136,23 @@ class Workspace:
             })
         return out
 
-    def select(self, species: str) -> dict:
-        """Set the active analysis to ``species`` (creating it if new)."""
-        slug = slugify(species)
+    def select(self, taxon: str) -> dict:
+        """Set the active analysis to ``taxon`` (creating it if new)."""
+        slug = slugify(taxon)
         if slug not in self._states:
-            self._states[slug] = self._load_or_create(species, slug)
+            self._states[slug] = self._load_or_create(taxon, slug)
         self.active_slug = slug
-        return {"species": species, "slug": slug, "run_id": slug}
+        return {"taxon": taxon, "slug": slug, "run_id": slug}
 
-    def _load_or_create(self, species: str, slug: str) -> AnalysisState:
+    def _load_or_create(self, taxon: str, slug: str) -> AnalysisState:
         output_dir = self._analysis_dir(slug)
         output_dir.mkdir(parents=True, exist_ok=True)
 
-        # Persist the human-readable species name alongside the slug so the
+        # Persist the human-readable taxon name alongside the slug so the
         # listing can show it verbatim.
         meta_path = self._meta_path(slug)
         if not meta_path.exists():
-            meta_path.write_text(json.dumps({"species": species, "run_id": slug}, indent=2))
+            meta_path.write_text(json.dumps({"taxon": taxon, "run_id": slug}, indent=2))
 
         state = AnalysisState(
             embeddings=self.embeddings,
@@ -179,7 +179,7 @@ class Workspace:
 
     def active_state(self) -> AnalysisState:
         if self.active_slug is None or self.active_slug not in self._states:
-            raise RuntimeError("No active analysis. Select a species first.")
+            raise RuntimeError("No active analysis. Select a taxon first.")
         return self._states[self.active_slug]
 
     # ── File serving ─────────────────────────────────────────────────────────

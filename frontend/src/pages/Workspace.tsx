@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { analysisApi } from "@/api/client";
-import SpeciesGate from "@/components/SpeciesGate";
+import TaxonGate from "@/components/TaxonGate";
 import TrainTab from "@/components/TrainTab";
 import EvaluateTab from "@/components/EvaluateTab";
 import ResultsTab from "@/components/ResultsTab";
@@ -11,7 +11,7 @@ type Tab = (typeof TABS)[number];
 
 export default function Workspace() {
   const queryClient = useQueryClient();
-  const [species, setSpecies] = useState<string | null>(null);
+  const [taxon, setTaxon] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>("Train");
 
   // On load, resume whatever analysis the server currently has active (if any).
@@ -21,17 +21,17 @@ export default function Workspace() {
   });
 
   useEffect(() => {
-    if (current?.active && current.species && species === null) {
-      setSpecies(current.species);
+    if (current?.active && current.taxon && taxon === null) {
+      setTaxon(current.taxon);
     }
-  }, [current, species]);
+  }, [current, taxon]);
 
   const handleSelected = (s: string) => {
     // The server's active analysis changed — drop all cached per-analysis data
-    // so the tabs refetch for the newly selected species.
+    // so the tabs refetch for the newly selected taxon.
     queryClient.removeQueries();
     setActiveTab("Train");
-    setSpecies(s);
+    setTaxon(s);
   };
 
   if (isLoading) {
@@ -42,25 +42,25 @@ export default function Workspace() {
     );
   }
 
-  if (species === null) {
-    return <SpeciesGate onSelected={handleSelected} />;
+  if (taxon === null) {
+    return <TaxonGate onSelected={handleSelected} />;
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-6" key={species}>
+    <div className="mx-auto max-w-7xl px-4 py-6" key={taxon}>
       <div className="mb-4 flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-grey-300">{species}</h1>
+          <h1 className="text-2xl font-bold text-grey-300">{taxon}</h1>
           <p className="text-sm text-grey-200">Agile-modelling analysis</p>
         </div>
         <button
           onClick={() => {
             queryClient.removeQueries();
-            setSpecies(null);
+            setTaxon(null);
           }}
           className="rounded border border-grey-100 px-3 py-1.5 text-sm font-medium text-grey-200 hover:bg-gray-100"
         >
-          Change species
+          Change taxon
         </button>
       </div>
 

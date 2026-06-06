@@ -6,7 +6,7 @@ from src.backend.settings import AGILE_MODELING_PARAMS, EVALUATION_PARAMS, DEFAU
 
 
 class SelectRequest(BaseModel):
-    species: str
+    taxon: str
 
 
 class SearchRequest(BaseModel):

@@ -101,7 +101,7 @@ export default function EvaluateTab() {
           <p>
             <span className="font-medium">What it measures.</span> For every patch
             the model produces a score — higher means "more likely to be the target
-            species." ROC-AUC is the probability that a real positive patch gets a
+            taxon." ROC-AUC is the probability that a real positive patch gets a
             higher score than a real negative one. <span className="font-medium">1.0</span>{" "}
             means the model always ranks the target above non-targets,{" "}
             <span className="font-medium">0.5</span> means it's guessing.

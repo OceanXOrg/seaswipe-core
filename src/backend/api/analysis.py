@@ -1,6 +1,6 @@
 """Analysis API — the single-analysis agile-modelling workflow.
 
-Operates on the server's one active analysis (selected by species). No database,
+Operates on the server's one active analysis (selected by taxon). No database,
 no auth, no task queue: state lives on the filesystem under the workspace's
 ``analyses/{slug}/`` directory.
 """
@@ -73,11 +73,11 @@ def list_analyses():
 
 @router.post("/select")
 def select(body: SelectRequest):
-    """Set the active analysis to a species (creating it if it doesn't exist)."""
-    species = body.species.strip()
-    if not species:
-        raise HTTPException(400, "Species name is required")
-    return get_workspace().select(species)
+    """Set the active analysis to a taxon (creating it if it doesn't exist)."""
+    taxon = body.taxon.strip()
+    if not taxon:
+        raise HTTPException(400, "Taxon name is required")
+    return get_workspace().select(taxon)
 
 
 @router.get("/current")
@@ -87,15 +87,15 @@ def current():
         return {"active": False}
     state = ws.active_state()
     meta = ws._meta_path(ws.active_slug)
-    species = ws.active_slug
+    taxon = ws.active_slug
     if meta.exists():
         try:
-            species = json.loads(meta.read_text()).get("species", ws.active_slug)
+            taxon = json.loads(meta.read_text()).get("taxon", ws.active_slug)
         except Exception:
             pass
     return {
         "active": True,
-        "species": species,
+        "taxon": taxon,
         "slug": ws.active_slug,
         "run_id": state.run_id,
         "has_model": state.weights is not None,

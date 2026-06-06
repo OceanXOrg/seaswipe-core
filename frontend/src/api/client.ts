@@ -190,7 +190,7 @@ export const analysisApi = {
   // Train & sample
   train: () => request<TrainResult>("/train", { method: "POST" }),
   histogram: () => request<HistogramData>("/histogram"),
-  sample: (target_logit = 0, n = 20) =>
+  sample: (target_logit = 0, n = 10) =>
     request<SampleResult>("/sample", {
       method: "POST",
       body: JSON.stringify({ target_logit, n }),

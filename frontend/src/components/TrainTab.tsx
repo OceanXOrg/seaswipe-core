@@ -24,12 +24,12 @@ export default function TrainTab() {
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
   const [reviewLightboxIdx, setReviewLightboxIdx] = useState<number | null>(null);
 
-  // Active-learning sample size K (default 20). 1/4 is shown as dissimilar in
+  // Active-learning sample size K (default 10). 1/4 is shown as dissimilar in
   // the seed search, 3/4 as nearest neighbours.
   const SAMPLE_SIZE_KEY = "seaswipe.train.sampleSize";
   const [sampleSize, setSampleSize] = useState<number>(() => {
     const stored = Number(localStorage.getItem(SAMPLE_SIZE_KEY));
-    return Number.isFinite(stored) && stored > 0 ? stored : 20;
+    return Number.isFinite(stored) && stored > 0 ? stored : 10;
   });
   useEffect(() => {
     localStorage.setItem(SAMPLE_SIZE_KEY, String(sampleSize));

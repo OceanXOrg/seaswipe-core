@@ -14,8 +14,8 @@ AGILE_MODELING_PARAMS = {
     "train_epochs": 128,
     "batch_size": 32,
     "learning_rate": 0.001,
-    # Similarity search initialisation: with the default sample size K = 20,
-    # 3/4 K = 15 nearest neighbours and 1/4 K = 5 dissimilar patches are shown.
+    # Similarity search initialisation: with the default sample size K = 10,
+    # 3/4 K = 10 nearest neighbours and 1/4 K = 5 dissimilar patches are shown.
     "initialisation_nearest_neighbours": 15,
     "initialisation_n_dissimilar": 5,
 }
@@ -23,9 +23,9 @@ AGILE_MODELING_PARAMS = {
 # Default active-learning sample size K. For a binary linear probe, sampling the
 # patches whose predicted logit is closest to 0 (the decision boundary) is
 # exactly Entropy Sampling — the Bernoulli entropy of sigmoid(logit) is maximal
-# at logit = 0. So "Entropy Sampling, K = 20" is implemented by margin sampling
-# at target_logit = 0 with n = 20.
-DEFAULT_SAMPLE_SIZE = 20
+# at logit = 0. So "Entropy Sampling, K = 10" is implemented by margin sampling
+# at target_logit = 0 with n = 10.
+DEFAULT_SAMPLE_SIZE = 10
 
 EVALUATION_PARAMS = {
     "n_buckets": 6,        # B — logarithmic quantile buckets
@@ -37,12 +37,6 @@ EVALUATION_PARAMS = {
 # analysis exactly reproducible from the same labels.json. Override per-call to
 # ensemble or run a sensitivity analysis.
 RANDOM_SEED = 42
-
-# ── Frame extraction (documentation only) ─────────────────────────────────────
-# The open-source tool starts from a folder of frames, so it does not extract
-# frames from video. The cadence used to produce the frames for the paper is
-# recorded here for reproducibility: one frame per 20 s of video.
-FRAME_EXTRACTION_INTERVAL = 20.0  # seconds between extracted frames
 
 # ── Detector (YOLO) ──────────────────────────────────────────────────────────
 

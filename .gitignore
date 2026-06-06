@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# Node / frontend build
+node_modules/
+frontend/dist/
+
+# Preprocessing / analysis outputs
+seaswipe_output/
+*.npz
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/

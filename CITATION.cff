@@ -1,0 +1,47 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata from this file."
+type: software
+title: "SeaSwipe: rapid, open-set taxa counting from imagery by specialising foundation detectors with agile modelling"
+abstract: "SeaSwipe is an agile workflow for rapid, open-set taxa counting from imagery, specialising foundation object detectors with agile modelling."
+authors:
+  - given-names: Filippo
+    family-names: Varini
+    affiliation: "OceanX, New York, NY, USA; Imperial College London, London, UK"
+  - given-names: Jeriyla
+    family-names: Kamau-Weng
+    affiliation: "OceanX, New York, NY, USA"
+  - given-names: Matt
+    family-names: Kravetz
+    affiliation: "OceanX, New York, NY, USA"
+  - given-names: Eric
+    family-names: Guan
+    affiliation: "OceanX, New York, NY, USA"
+  - given-names: Alexis
+    family-names: Weinnig
+    affiliation: "OceanX, New York, NY, USA"
+  - given-names: Kailani
+    family-names: Acosta
+    affiliation: "OceanX, New York, NY, USA"
+  - given-names: Larissa
+    family-names: Frühe
+    affiliation: "OceanX, New York, NY, USA"
+  - given-names: Mattie
+    family-names: Rodrigue
+    affiliation: "OceanX, New York, NY, USA; Ocean Alliance, Gloucester, Massachusetts, USA"
+  - given-names: Yara Katia
+    family-names: Rodrigues
+    affiliation: "IMar - Instituto do Mar I.P., Mindelo, Cape Verde"
+  - given-names: Vincent Allen
+    family-names: Pieribone
+    affiliation: "OceanX, New York, NY, USA"
+repository-code: "https://github.com/OceanXOrg/seaswipe-core"
+license: MIT
+keywords:
+  - computer vision
+  - object detection
+  - foundation models
+  - agile modelling
+  - open-set detection
+  - marine ecology
+  - biodiversity monitoring
+  - taxa counting
